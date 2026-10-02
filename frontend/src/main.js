@@ -1,10 +1,11 @@
 import ForceGraph3D from '3d-force-graph';
 import * as THREE from 'three';
 import SpriteText from 'three-spritetext';
+import { createApi } from './api.js';
 import './style.css';
 
-// Empty = same origin: the dev server proxies /api, and in production FastAPI serves this page.
-const API = import.meta.env.VITE_API_URL ?? '';
+// The FastAPI backend, or (static build) the same logic running in the browser.
+let api;
 
 const COLLIDE_MS = 1100; // particle streams race from both picks to the midpoint
 const FLASH_MS = 900;
@@ -304,14 +305,8 @@ async function narrateBridge(path, run) {
   ui.summary.textContent = 'Narrating the bridge…';
   ui.summary.classList.add('pending');
   try {
-    const res = await fetch(`${API}/api/v1/narrate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ path }),
-    });
-    const body = await res.json();
+    const body = await api.narrate(path);
     if (run !== state.run) return; // a newer bridge replaced this one
-    if (!res.ok) throw new Error(body.detail ?? `HTTP ${res.status}`);
     [...ui.chain.children].slice(1).forEach((li, i) => {
       li.append(Object.assign(document.createElement('p'), { className: 'why', textContent: body.steps[i] }));
     });
@@ -370,13 +365,7 @@ async function runBridge(source, target) {
   try {
     if (state.bridge) await reset();
     setStatus(`Routing ${source} → ${target}…`);
-    const res = await fetch(`${API}/api/v1/bridge`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ source, target }),
-    });
-    const body = await res.json();
-    if (!res.ok) throw new Error(typeof body.detail === 'string' ? body.detail : `HTTP ${res.status}`);
+    const body = await api.bridge(source, target);
 
     showPlaced(body.placed, body.hops);
     // The backend resolves case and whitespace, so trust its names over what was typed.
@@ -435,12 +424,8 @@ function surprise() {
 
 async function load() {
   try {
-    const [health, space] = await Promise.all(
-      ['health', 'space'].map((path) => fetch(`${API}/api/v1/${path}`).then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })),
-    );
+    api = await createApi({ onStatus: (text) => setStatus(text) });
+    const [health, space] = await Promise.all([api.health(), api.space()]);
     state.features = health;
     const { nodes, links } = space;
     nodes.forEach((n) => {
@@ -452,6 +437,9 @@ async function load() {
     state.links = links;
     ui.list.replaceChildren(...nodes.map((n) => Object.assign(document.createElement('option'), { value: n.id })));
     if (health.free_text) ui.hint.innerHTML = 'Tip: click nodes to pick, or type <em>anything</em>: new phrases get embedded and placed on the fly.';
+    if (health.static) {
+      ui.hint.innerHTML += ' This demo runs entirely in your browser; <a href="https://github.com/alex-in-CS/semantic-shockwave" target="_blank" rel="noopener">run the full app</a> for LLM narration of each hop.';
+    }
     restyle();
     graph.graphData({ nodes, links });
     overview(0);

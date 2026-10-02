@@ -58,18 +58,32 @@ def build_space(
                  graph=build_graph(labels, vectors, k=k), k=k, embed=embed)
 
 
-def default_space() -> Space:
+def default_space(free_text: bool | None = None) -> Space:
     concepts_path = Path(os.getenv("SHOCKWAVE_CONCEPTS", BACKEND_DIR / "data" / "concepts.txt"))
     cache_dir = Path(os.getenv("SHOCKWAVE_CACHE_DIR", BACKEND_DIR / ".cache"))
     labels = load_concepts(concepts_path)
     log.info("embedding %d concepts from %s", len(labels), concepts_path)
-    free_text = os.getenv("SHOCKWAVE_FREE_TEXT", "1") != "0"
+    if free_text is None:
+        free_text = os.getenv("SHOCKWAVE_FREE_TEXT", "1") != "0"
     space = build_space(labels, cached_embed(labels, cache_dir),
                         embed=lazy_embedder() if free_text else None)
     if space.embed:
         # Load the model and JIT-compile UMAP.transform now, not on the first visitor's query.
         space.layout.place(space.embed(["warm up"]))
     return space
+
+
+def space_payload(space: Space) -> dict:
+    """The concept cloud as the frontend draws it: 3D nodes plus the bridge graph's edges."""
+    nodes = [
+        {"id": label, "x": float(x), "y": float(y), "z": float(z)}
+        for label, (x, y, z) in zip(space.labels, space.layout.coords, strict=True)
+    ]
+    links = [
+        {"source": a, "target": b, "similarity": round(1.0 - d["distance"], 4)}
+        for a, b, d in space.graph.edges(data=True)
+    ]
+    return {"nodes": nodes, "links": links}
 
 
 def default_static_dir() -> Path | None:
@@ -140,16 +154,7 @@ def create_app(
 
     @app.get("/api/v1/space")
     def space(request: Request) -> dict:
-        s: Space = request.app.state.space
-        nodes = [
-            {"id": label, "x": float(x), "y": float(y), "z": float(z)}
-            for label, (x, y, z) in zip(s.labels, s.layout.coords, strict=True)
-        ]
-        links = [
-            {"source": a, "target": b, "similarity": round(1.0 - d["distance"], 4)}
-            for a, b, d in s.graph.edges(data=True)
-        ]
-        return {"nodes": nodes, "links": links}
+        return space_payload(request.app.state.space)
 
     @app.post("/api/v1/bridge")
     def bridge(body: BridgeRequest, request: Request) -> dict:

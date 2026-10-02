@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@huggingface/transformers": "^4.3.0",
     "3d-force-graph": "^1.77.0",
     "three": "^0.186.1",
     "three-spritetext": "^1.10.0"

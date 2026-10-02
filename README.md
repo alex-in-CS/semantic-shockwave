@@ -11,6 +11,11 @@ linked into a graph where the shortest path between two ideas is their
 *semantic bridge*. You can also type any phrase at all ("my first heartbreak",
 "rainy monday morning"); it gets embedded on the fly and dropped into the cloud.
 
+### ▶ [Try the live demo](https://alex-in-cs.github.io/semantic-shockwave/)
+
+The demo runs entirely in your browser: no server, no sign-up. LLM narration
+needs the full app (see [Two ways to run it](#two-ways-to-run-it)).
+
 ![Demo: black hole to jazz](docs/demo.gif)
 
 | Free-text concepts | Phone layout |
@@ -80,6 +85,7 @@ linked into a graph where the shortest path between two ideas is their
 - Click nodes to pick, or type with autocomplete
 - Works on phones: the panel docks to the bottom and the camera frames the space above it
 - One container serves the API and the frontend together
+- A browser-only build of the same app, hosted free on GitHub Pages
 
 ## Tech stack
 
@@ -92,6 +98,26 @@ linked into a graph where the shortest path between two ideas is their
 | API | FastAPI, Uvicorn |
 | Frontend | Vite, `3d-force-graph` + three.js, `three-spritetext`, vanilla JS |
 | Tooling | `uv`, `pytest`, `ruff`, Docker, GitHub Actions |
+
+## Two ways to run it
+
+| | Full app (FastAPI) | Static demo (browser only) |
+|---|---|---|
+| Where | locally, or the Docker image | [GitHub Pages](https://alex-in-cs.github.io/semantic-shockwave/), or any static host |
+| Routing | `networkx` on the server | the same squared-distance Dijkstra in JavaScript |
+| Free text | sentence-transformers + `UMAP.transform` | the same model via [transformers.js](https://huggingface.co/docs/transformers.js) (about 23 MB, downloaded once), placed at the similarity-weighted centroid of its nearest concepts |
+| Narration | yes (Groq or Ollama) | no: it would need an API key in the browser |
+
+The static build reads `space.json`, which `python -m shockwave.export`
+writes: the UMAP layout, the bridge graph and int8-quantized vocabulary
+vectors (438 KB). Both builds find the same bridges. The
+[Pages workflow](.github/workflows/pages.yml) regenerates it on every push.
+
+```bash
+# Build the static demo yourself
+cd backend && uv run python -m shockwave.export ../frontend/public/space.json
+cd ../frontend && VITE_STATIC=1 npm run build    # serve frontend/dist from any static host
+```
 
 ## Run it locally
 
@@ -145,6 +171,7 @@ Then restart the backend. `GET /api/v1/health` reports whether narration is on.
 | `SHOCKWAVE_CORS_ORIGINS` | `http://localhost:5173` | Comma-separated allowed origins (only for split hosting) |
 | `HOST` / `PORT` | `127.0.0.1` / `8000` | Backend bind address |
 | `VITE_API_URL` (frontend build) | same origin | Backend base URL, if hosted separately |
+| `VITE_STATIC` (frontend build) | unset | `1` builds the browser-only demo that reads `space.json` |
 
 See [`.env.example`](.env.example). Want your own universe? Edit
 `backend/data/concepts.txt` and restart. The embeddings re-cache on their own.
@@ -159,9 +186,9 @@ docker run -p 7860:7860 -e GROQ_API_KEY=gsk_... semantic-shockwave   # with narr
 
 The image builds the frontend, installs CPU-only torch, and bakes the model and
 vocabulary embeddings in, so a container starts without network access. It
-listens on port 7860 as uid 1000, which is what
-[Hugging Face Spaces](https://huggingface.co/docs/hub/spaces-sdks-docker)
-expects. See [docs/DEPLOY.md](docs/DEPLOY.md) for hosting it there for free.
+listens on port 7860 as uid 1000. The running container uses about 700 MB of
+RAM and takes about 90 seconds to boot. See [docs/DEPLOY.md](docs/DEPLOY.md)
+for hosting options.
 
 ## API
 
@@ -183,7 +210,7 @@ Interactive docs are at http://127.0.0.1:8000/docs.
 
 ```bash
 cd backend
-uv run pytest      # 38 tests: routing, free text, narration, API, cache, layout. No model or LLM needed.
+uv run pytest      # 41 tests: routing, free text, narration, API, export, cache, layout. No model or LLM needed.
 uv run ruff check .
 ```
 
@@ -196,7 +223,7 @@ to check routing properties exactly:
 - the LLM client is exercised against a mocked HTTP transport, including bad JSON, wrong step counts, HTTP errors and caching
 
 CI runs the backend tests and lint, the frontend build and the Docker build on
-every push.
+every push, and the Pages workflow redeploys the static demo.
 
 ## Project layout
 
@@ -208,11 +235,14 @@ backend/
     embeddings.py   sentence-transformers wrapper, on-disk cache, lazy query embedder
     layout.py       UMAP → 3D, fit to sphere, place new points
     narrate.py      OpenAI-compatible LLM client + JSON validation
+    export.py       static space.json for the browser-only build
     concepts.py     vocabulary loader
   data/concepts.txt
   tests/
 frontend/
   src/main.js       3D scene, collision/blast/extraction animation, UI wiring
+  src/api.js        talks to the backend, or loads the static API
+  src/static-api.js the backend reimplemented in the browser (routing, transformers.js)
   src/style.css
 docs/               demo GIF, screenshots, deployment guide
 Dockerfile          single-container build (frontend + backend)
@@ -224,7 +254,7 @@ Dockerfile          single-container build (frontend + backend)
 - [x] **LLM narration:** Groq or a local Ollama explains *why* each hop connects.
 - [x] **Free-text concepts:** embed any phrase on the fly and place it with `UMAP.transform`.
 - [x] Demo GIF in this README.
-- [ ] **Hosted demo** on Hugging Face Spaces (container is ready; see [docs/DEPLOY.md](docs/DEPLOY.md)).
+- [x] **Hosted demo:** a [browser-only build](https://alex-in-cs.github.io/semantic-shockwave/) on GitHub Pages.
 - [ ] Stream narration token by token instead of waiting for the whole answer.
 
 ## License

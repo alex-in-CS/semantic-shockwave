@@ -105,3 +105,4 @@ button:disabled { opacity: 0.5; cursor: wait; }
 #summary { margin: 10px 0 0; font-size: 0.85rem; line-height: 1.4; }
 #summary:empty { display: none; }
 #summary.pending { color: var(--muted); font-style: italic; }
+.hint a { color: var(--accent); }

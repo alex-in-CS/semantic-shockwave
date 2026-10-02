@@ -1,75 +1,56 @@
 # Deploying Semantic Shockwave
 
-The repo's `Dockerfile` builds one container that serves both the API and the
-frontend. Anything that runs a Docker image works. The steps below use
-**Hugging Face Spaces**, whose free CPU tier (2 vCPU, 16 GB RAM) runs the
-embedding model and UMAP comfortably.
+There are two builds, and they host differently.
 
-## Hugging Face Spaces
+| Build | Needs | Narration | Cost |
+|---|---|---|---|
+| **Static demo** (`VITE_STATIC=1`) | any static file host | no | free |
+| **Full app** (Docker image) | a container host with ~1 GB RAM | yes | depends on the host |
 
-1. **Create the Space.** Go to <https://huggingface.co/new-space>, pick
-   **Docker** as the SDK, choose the **Blank** template, and leave the hardware on
-   *CPU basic* (free).
+## Static demo on GitHub Pages (what the live demo uses)
 
-2. **Give it a Space README.** A Space reads its settings from YAML at the top
-   of its own `README.md`. Use this as the Space's README (not this repo's):
+[`.github/workflows/pages.yml`](../.github/workflows/pages.yml) does everything
+on each push to `main`:
 
-   ```markdown
-   ---
-   title: Semantic Shockwave
-   emoji: 💥
-   colorFrom: pink
-   colorTo: yellow
-   sdk: docker
-   app_port: 7860
-   license: mit
-   short_description: Blow away everything but the bridge between two ideas
-   ---
+1. Installs the backend and runs `python -m shockwave.export`, which writes
+   `space.json` (the UMAP layout, the bridge graph and int8 vocabulary vectors).
+2. Builds the frontend with `VITE_STATIC=1`, which swaps the HTTP API for an
+   in-browser one (Dijkstra in JavaScript, free text via transformers.js).
+3. Publishes `frontend/dist` to GitHub Pages.
 
-   Source: https://github.com/alex-in-CS/semantic-shockwave
-   ```
+One-time setup: in the repo's *Settings → Pages*, set **Source** to
+**GitHub Actions** (or run
+`gh api -X POST repos/<owner>/<repo>/pages -f build_type=workflow`).
 
-3. **Push the code.** Clone the Space, copy in the project, and push:
+Any other static host works the same way: run the two commands from the
+README's "Build the static demo yourself" section and upload `frontend/dist`.
+The build uses relative paths, so it can live at a domain root or in a subfolder.
 
-   ```bash
-   git clone https://huggingface.co/spaces/<you>/semantic-shockwave hf-space
-   cd hf-space
-   # copy everything from this repo except .git and docs/ (Spaces needs LFS/Xet for binaries)
-   cp -r ../semantic-shockwave/{backend,frontend,Dockerfile,.dockerignore,LICENSE} .
-   # write the README from step 2, then:
-   git add . && git commit -m "Deploy Semantic Shockwave" && git push
-   ```
-
-   The Space builds the image (about 5–10 minutes the first time, mostly the
-   PyTorch download) and starts it. The first boot also runs UMAP over the
-   vocabulary, so allow roughly another minute before the page loads.
-
-4. **Turn on narration (optional).** In the Space's *Settings → Variables and
-   secrets*, add a **secret** named `GROQ_API_KEY` with a key from
-   <https://console.groq.com/keys>. The Space restarts with narration on. Never
-   put the key in the repo.
-
-5. **Link it.** Put the Space URL in this repo's README (replacing the
-   "Hosted demo" roadmap item) and in the GitHub repo's *About* box.
-
-### Keeping it in sync (optional)
-
-To redeploy on every push to `main`, add a GitHub Actions job that pushes the
-same files to the Space with a Hugging Face write token stored as the repo
-secret `HF_TOKEN`. See the Hugging Face guide
-[Managing Spaces with GitHub Actions](https://huggingface.co/docs/hub/spaces-github-actions).
-
-## Anywhere else
+## Full app as a container
 
 ```bash
 docker build -t semantic-shockwave .
 docker run -p 7860:7860 -e GROQ_API_KEY=gsk_... semantic-shockwave
 ```
 
-The platform must route traffic to the container's `PORT` (default 7860; set
-`PORT` to change it). The running container uses about 700 MB of RAM, so a
-1 GB instance is the practical minimum and 2 GB leaves headroom. It takes
-about 90 seconds to boot (UMAP plus JIT compilation) before `/api/v1/health`
-answers. To host the frontend
-separately (on a static host, say), build it with `VITE_API_URL=https://your-api`
-and set `SHOCKWAVE_CORS_ORIGINS` on the backend to the frontend's origin.
+The image bakes in the model and vocabulary embeddings and boots without network
+access (`HF_HUB_OFFLINE=1`). The platform must route traffic to the container's
+`PORT` (default 7860). Measured locally: about 700 MB of RAM, and about 90
+seconds from start until `/api/v1/health` answers (UMAP plus JIT compilation).
+So:
+
+- **Hosts with 512 MB free tiers are too small.** Give it 1 GB at least.
+- **Scale-to-zero hosts** (Cloud Run and similar) make the first visit after an
+  idle period wait for that 90-second boot, unless one instance stays warm.
+- **Hugging Face Spaces:** Docker Spaces need a PRO subscription (since 2026;
+  only static Spaces are free). With PRO, create a Docker Space with
+  `app_port: 7860` in its README front matter, upload `backend/`, `frontend/`,
+  `Dockerfile`, `.dockerignore` and `LICENSE`, and add `GROQ_API_KEY` as a
+  Space secret.
+
+Set `GROQ_API_KEY` (or `SHOCKWAVE_LLM_BASE_URL`) as a secret in whatever host
+you use; never commit it.
+
+To host the frontend separately from the API, build it with
+`VITE_API_URL=https://your-api` and set `SHOCKWAVE_CORS_ORIGINS` on the backend
+to the frontend's origin.
