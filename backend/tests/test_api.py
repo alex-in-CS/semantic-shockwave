@@ -55,8 +55,10 @@ def test_health_reports_features(client):
 def test_space_shape(client):
     body = client.get("/api/v1/space").json()
     assert [n["id"] for n in body["nodes"]] == LABELS
-    assert set(body["nodes"][0]) == {"id", "x", "y", "z"}
+    assert set(body["nodes"][0]) == {"id", "group", "x", "y", "z"}
     assert body["links"], "graph should have edges"
+    assert body["k"] == 6 and body["vectors"]["dims"] == 8
+    assert body["groups"] == ["Other"]
     ids = set(LABELS)
     assert all(link["source"] in ids and link["target"] in ids for link in body["links"])
 
@@ -67,7 +69,7 @@ def test_bridge(client):
     body = res.json()
     assert body["path"][0] == "c0" and body["path"][-1] == "c9"
     assert len(body["hops"]) == len(body["path"]) - 1
-    assert body["placed"] == []
+    assert body["placed"] == [] and body["links"] == []
 
 
 def test_bridge_matches_vocabulary_case_insensitively(client):
@@ -82,7 +84,12 @@ def test_free_text_concept_is_placed_and_routed(client):
     # It sits between c4 and c5, so the walk along the arc reaches c4 first.
     assert body["path"][-2] in {"c4", "c5"}
     assert [p["id"] for p in body["placed"]] == ["mid"]
-    assert set(body["placed"][0]) == {"id", "x", "y", "z"}
+    assert set(body["placed"][0]) == {"id", "group", "x", "y", "z", "vector"}
+    assert len(body["placed"][0]["vector"]) == 8
+    # Every edge of the placed concept is returned, so the browser can search through it.
+    links = body["links"]
+    assert len(links) == 6
+    assert all("mid" in (link["source"], link["target"]) for link in links)
 
 
 def test_free_text_does_not_leak_into_shared_graph(client):

@@ -1,7 +1,9 @@
-# Concept vocabulary: one per line. Edit freely; embeddings re-cache automatically.
-# Wide on purpose: the fun is in bridging distant domains.
+# Concept vocabulary: one concept per line. Edit freely; embeddings re-cache automatically.
+# "## Name" starts a section: sections color the nodes and name the regions of the cloud.
+# Other lines starting with "#" are comments. Wide on purpose: the fun is in bridging
+# distant domains.
 
-# Physics & space
+## Space & physics
 black hole
 gravity
 supernova
@@ -44,8 +46,54 @@ laser
 prism
 sound wave
 resonance
+quasar
+nebula
+asteroid belt
+Milky Way
+Mars
+Jupiter
+Saturn's rings
+Pluto
+solar flare
+wormhole
+multiverse
+event horizon
+dark energy
+cosmic ray
+gravitational wave
+Higgs boson
+electron
+photon
+quark
+neutrino
+superconductor
+plasma
+electromagnetism
+inertia
+acceleration
+velocity
+centrifugal force
+half-life
+nuclear fission
+particle accelerator
+string theory
+Schrödinger's cat
+uncertainty principle
+speed of light
+light year
+constellation
+shooting star
+satellite dish
+lunar landing module
+alien
+UFO
+space race
+zero gravity
+spacesuit
+observatory
+heat death of the universe
 
-# Earth & weather
+## Earth & weather
 volcano
 hurricane
 earthquake
@@ -73,8 +121,68 @@ island
 climate change
 drought
 wildfire
+tsunami
+avalanche
+geyser
+hot spring
+waterfall
+lake
+river delta
+coastline
+beach
+sand dune
+iceberg
+permafrost
+tundra
+savanna
+prairie
+steppe
+valley
+cliff
+plateau
+archipelago
+coral atoll
+ocean current
+jet stream
+El Niño
+hailstorm
+blizzard
+heatwave
+humidity
+breeze
+cloud
+sunrise
+sunset
+dew
+frost
+mud
+clay
+granite
+marble
+lava
+magma
+tectonic plate
+mineral
+quartz
+amber
+salt flat
+oasis
+fjord
+rift valley
+sinkhole
+erosion
+sediment
+ozone layer
+greenhouse effect
+carbon cycle
+water cycle
+pollution
+smog
+acid rain
+sea level rise
+deforestation
 
-# Life & nature
+## Living world
 evolution
 DNA
 photosynthesis
@@ -121,8 +229,61 @@ moss
 swamp
 jellyfish
 firefly
+tiger
+bear
+fox
+deer
+horse
+cat
+dog
+rabbit
+mouse
+snake
+frog
+turtle
+crocodile
+penguin
+parrot
+crow
+hummingbird
+bat
+dolphin
+salmon
+seahorse
+starfish
+squid
+plankton
+algae
+lichen
+cactus
+oak tree
+bamboo
+rose
+sunflower
+lotus
+orchid
+mushroom
+seaweed
+caterpillar
+cocoon
+beehive
+spider
+mosquito
+cockroach
+earthworm
+food chain
+natural selection
+genetics
+gene editing
+cloning
+biodiversity
+habitat
+herd
+pack animal
+territory
+mating dance
 
-# Body & health
+## Body & health
 heartbeat
 neuron
 brain
@@ -148,8 +309,73 @@ hunger
 exercise
 marathon
 yoga
+heart
+lungs
+liver
+skin
+bone
+eye
+ear
+tongue
+nose
+fingerprint
+hair
+teeth
+spine
+stomach
+gut bacteria
+blood type
+metabolism
+calorie
+protein
+vitamin
+antibiotic
+painkiller
+placebo
+allergy
+cancer
+diabetes
+heart attack
+stroke
+infection
+inflammation
+wound
+scar
+bandage
+hospital bed
+nurse
+doctor
+pharmacy
+x-ray
+MRI scan
+stethoscope
+pulse
+blood pressure
+insomnia
+nap
+snoring
+sneeze
+yawn
+laughter
+tears
+sweat
+goosebumps
+puberty
+pregnancy
+twins
+old age
+longevity
+diet
+fasting
+weightlifting
+running
+stretching
+injury
+recovery
+wheelchair
+prosthetic limb
 
-# Mind & feelings
+## Mind & feelings
 memory
 dream
 consciousness
@@ -185,8 +411,67 @@ regret
 desire
 childhood
 identity
+nightmare
+daydream
+deja vu
+subconscious
+ego
+personality
+introvert
+extrovert
+motivation
+willpower
+procrastination
+stress
+burnout
+depression
+therapy
+mindfulness
+gratitude
+pride
+guilt
+envy
+compassion
+kindness
+cruelty
+forgiveness
+revenge
+betrayal
+loyalty
+heartbreak
+crush
+first love
+infatuation
+lust
+awe
+wonder
+surprise
+disgust
+embarrassment
+confidence
+insecurity
+ambition
+greed
+generosity
+patience
+impatience
+stubbornness
+optimism
+pessimism
+cynicism
+melancholy
+euphoria
+serenity
+panic
+phobia
+trauma
+resilience
+self-esteem
+loneliness epidemic
+midlife crisis
+inner child
 
-# Knowledge & science
+## Knowledge & ideas
 mathematics
 geometry
 prime number
@@ -216,8 +501,72 @@ biology
 linguistics
 fractal
 zero
+infinity symbol
+algebra
+calculus
+pi
+golden ratio
+Fibonacci sequence
+equation
+proof
+theorem
+game theory
+chaos theory
+evolution theory
+periodic table
+element
+molecule
+chemical reaction
+catalyst
+acid
+DNA sequencing
+scientific method
+peer review
+Nobel Prize
+Einstein
+Newton
+Darwin
+Marie Curie
+Galileo
+Aristotle
+Plato
+Socrates
+Confucius
+Buddha
+Nietzsche
+existentialism
+stoicism
+nihilism
+utilitarianism
+free will
+determinism
+morality
+ethics
+metaphysics
+epistemology
+common sense
+fallacy
+argument
+debate
+critical thinking
+knowledge graph
+dictionary
+alphabet
+grammar
+translation
+sign language
+hieroglyphs
+cipher
+code
+textbook
+exam
+homework
+lecture
+thesis
+PhD
+genius loci
 
-# Technology
+## Technology
 computer
 algorithm
 internet
@@ -262,8 +611,67 @@ spreadsheet
 open source
 cloud computing
 self-driving car
+microchip
+transistor
+quantum computer
+supercomputer
+server farm
+data center
+database
+programming language
+bug
+computer virus
+firewall
+malware
+phishing
+social network
+smartwatch
+headphones
+microphone
+loudspeaker
+vinyl record
+cassette tape
+compact disc
+streaming service
+podcast
+emoji
+meme
+hashtag
+chatbot
+machine learning
+deepfake
+augmented reality
+metaverse
+cryptocurrency
+bitcoin
+electric car
+jet engine
+helicopter
+submarine
+spaceship
+telescope lens
+light bulb
+refrigerator
+microwave oven
+washing machine
+vacuum cleaner
+elevator
+escalator
+GPS
+barcode
+QR code
+Wi-Fi
+fiber optic cable
+power grid
+wind turbine
+hydroelectric dam
+lithium
+rocket engine
+typewriter
+calculator
+abacus
 
-# Society & economics
+## Society & money
 money
 market
 trade
@@ -321,8 +729,77 @@ justice
 human rights
 globalization
 refugee
+billionaire
+middle class
+working class
+union
+strike
+minimum wage
+unemployment
+recession
+economic bubble
+credit card
+loan
+mortgage
+rent
+landlord
+insurance
+pension
+charity
+volunteer
+nonprofit
+government
+president
+parliament
+dictator
+king
+queen
+citizen
+passport control
+vote
+referendum
+censorship
+free speech
+surveillance
+privacy
+terrorism
+crime
+detective
+lawyer
+judge
+jury
+verdict
+punishment
+mafia
+smuggling
+black market
+scam
+bribery
+celebrity
+influencer
+fame
+fashion week
+brand
+logo
+marketing
+supply chain
+shipping container
+monopoly
+competition
+negotiation
+contract
+office
+boss
+meeting
+deadline
+promotion
+layoff
+remote work
+commute
+traffic jam
+public transport
 
-# History & myth
+## History & myth
 ancient Egypt
 pyramid
 Roman Empire
@@ -353,8 +830,82 @@ legend
 prophecy
 treasure
 pirate
+Zeus
+Thor
+Odin
+Medusa
+minotaur
+Hercules
+Achilles
+Trojan horse
+Odyssey
+Excalibur
+King Arthur
+Robin Hood
+Holy Grail
+Noah's ark
+flood myth
+creation myth
+afterlife
+reincarnation
+karma
+heaven
+hell
+angel
+demon
+devil
+god
+goddess
+temple ritual
+sacrifice
+oracle
+shaman
+druid
+alchemy
+philosopher's stone
+elixir of life
+fountain of youth
+El Dorado
+Stonehenge
+Great Wall of China
+Colosseum
+Parthenon
+Mayan calendar
+Aztec empire
+Inca empire
+Mongol empire
+Ottoman Empire
+British Empire
+French Revolution
+American Revolution
+world war
+Holocaust
+Berlin Wall
+fall of Rome
+Black Death
+crusades
+inquisition
+feudalism
+serf
+peasant
+nobility
+emperor
+caveman
+stone age
+bronze age
+iron age
+cave painting
+mummy
+tomb
+ancient Greece
+democracy in Athens
+Spartan warrior
+Genghis Khan
+Cleopatra
+Napoleon
+Alexander the Great
 
-# Art & culture
+## Art & culture
 jazz
 symphony
 painting
@@ -414,8 +965,85 @@ puppet
 circus
 magic trick
 mime
+reggae
+country music
+heavy metal
+techno
+disco
+K-pop
+folk music
+gospel
+rap battle
+DJ
+concert
+music festival
+karaoke
+album
+radio hit
+saxophone
+trumpet
+cello
+flute
+harp
+banjo
+synthesizer
+microphone stand
+ballet
+tango
+salsa
+breakdance
+waltz
+Mona Lisa
+Van Gogh
+Picasso
+Beethoven
+Mozart
+Bach
+the Beatles
+Elvis
+Hollywood
+Bollywood
+blockbuster
+documentary
+sitcom
+soap opera
+reality TV
+video essay
+film noir
+western movie
+musical
+stand-up comedy
+fairy tale ending
+plot twist
+villain
+hero
+antihero
+sidekick
+monologue
+poem
+sonnet
+epic poem
+fable
+myth retelling
+bestseller
+author
+writer's block
+storytelling
+calligraphy
+origami
+pottery
+weaving
+mosaic
+stained glass
+mural
+street art
+gallery
+art auction
+masterpiece
+forgery
+museum heist
 
-# Sports & games
+## Sports & play
 football
 basketball
 chess
@@ -432,14 +1060,92 @@ dice
 lottery
 board game
 hide and seek
+baseball
+golf
+swimming
+cycling
+rowing
+sailing
+skiing
+snowboarding
+ice skating
+ice hockey
+volleyball
+rugby
+wrestling
+martial arts
+karate
+judo
+fencing
+archery
+gymnastics
+sprint
+high jump
+pole vault
+triathlon
+Tour de France
+World Cup
+Super Bowl
+penalty kick
+home run
+slam dunk
+checkmate
+referee
+coach
+team spirit
+fan
+stadium
+trophy
+gold medal
+underdog
+rivalry
+doping
+esports
+video game console
+arcade
+pinball
+Tetris
+Pac-Man
+Minecraft
+Mario
+Pokémon
+role-playing game
+Dungeons & Dragons
+crossword
+sudoku
+Rubik's cube
+jigsaw puzzle
+playing cards
+roulette
+casino
+bingo
+tag
+jump rope
+kite
+yo-yo
+toy
+doll
+teddy bear
+Lego
+playground swing
+roller coaster
+amusement park
+treasure hunt
+escape room
+magic show
+fishing
+hunting
+camping
+hiking
+birdwatching
+gardening hobby
+knitting
 
-# Food & everyday
+## Food & drink
 coffee
 bread
 wine
 spice
-fire
-kitchen
 salt
 chocolate
 tea
@@ -456,12 +1162,102 @@ restaurant
 street food
 farm
 harvest
-garden
 vegetarian
 beer
 candy
 breakfast
 picnic
+apple
+banana
+orange
+lemon
+strawberry
+grape
+watermelon
+mango
+coconut
+avocado
+tomato
+potato
+onion
+garlic
+chili pepper
+ginger
+cinnamon
+vanilla
+mint
+olive oil
+butter
+milk
+egg
+yogurt
+ice cream
+cake
+cookie
+pancake
+waffle
+croissant
+pasta
+noodles
+ramen
+dumpling
+taco
+burrito
+curry
+kebab
+hamburger
+hot dog
+french fries
+popcorn
+steak
+barbecue
+roast chicken
+fish and chips
+salad
+sandwich
+toast
+cereal
+jam
+peanut butter
+popsicle
+lemonade
+orange juice
+smoothie
+espresso
+cappuccino
+whiskey
+vodka
+champagne
+cocktail
+sake
+kombucha
+water
+feast
+banquet
+diet soda
+fast food
+food truck
+chef
+cookbook
+oven
+frying pan
+knife
+spoon
+chopsticks
+dinner party
+leftovers
+hangover
+taste
+umami
+bitter
+sweet
+sour
+spicy
+
+## Home & everyday
+kitchen
+garden
+fire
 home
 furniture
 door
@@ -475,8 +1271,90 @@ shoe
 backpack
 suitcase
 wallet
+bed
+pillow
+sofa
+chair
+table
+lamp
+mirror
+clock tower
+staircase
+attic
+basement
+roof
+chimney
+fireplace
+balcony
+fence
+mailbox
+doorbell
+carpet
+curtain
+wardrobe
+drawer
+shelf
+bookshelf
+bathtub
+shower
+toothbrush
+soap
+towel
+laundry
+iron board
+broom
+trash can
+recycling
+plant pot
+houseplant
+pet
+goldfish
+alarm clock
+calendar app
+to-do list
+notebook
+pen
+pencil
+eraser
+paper
+envelope
+letter
+postcard
+gift
+birthday
+birthday cake
+party balloon
+candlelight
+photograph album
+souvenir
+heirloom
+jewelry
+ring
+necklace
+watch
+glasses
+hat
+scarf
+gloves
+coat
+raincoat
+dress
+suit and tie
+jeans
+t-shirt
+sneakers
+high heels
+makeup
+perfume
+haircut
+neighbor
+roommate
+moving day
+housewarming
+chores
+weekend
 
-# Places & travel
+## Places & travel
 village
 desert island
 lighthouse
@@ -505,8 +1383,77 @@ marketplace
 neighborhood
 suburb
 metropolis
+Paris
+London
+New York
+Tokyo
+Rome
+Venice
+Istanbul
+Cairo
+Mumbai
+Rio de Janeiro
+Hong Kong
+Las Vegas
+Amazon river
+Sahara
+Himalayas
+Mount Everest
+Antarctica
+North Pole
+Arctic
+Pacific Ocean
+Mediterranean Sea
+Grand Canyon
+Niagara Falls
+Eiffel Tower
+Statue of Liberty
+Taj Mahal
+Machu Picchu
+Times Square
+castle
+palace
+bazaar
+farmhouse
+cabin in the woods
+skyscraper rooftop
+nightclub
+cafe
+bookstore
+bakery
+supermarket
+shopping mall
+gas station
+parking lot
+motel
+campsite
+national park
+zoo
+aquarium
+botanical garden
+museum hall
+concert hall
+library reading room
+classroom
+dormitory
+office tower
+factory floor
+construction site
+ghost town
+abandoned mall
+backpacking
+cruise ship
+first class
+jet lag
+souvenir shop
+tourist trap
+travel guide
+expedition
+pilgrimage
+exile
+homesickness
 
-# Abstract
+## Abstract
 chaos
 order
 infinity
@@ -515,7 +1462,6 @@ truth
 beauty
 silence
 journey
-mirror
 labyrinth
 balance
 power
@@ -550,7 +1496,57 @@ winter
 summer
 spring
 autumn
-weekend
 memory palace
 utopia
 apocalypse
+dystopia
+progress
+tradition versus change
+simplicity
+complexity
+illusion
+reality
+dream logic
+perspective
+contrast
+harmony of opposites
+yin and yang
+duality
+unity
+fragment
+whole
+edge
+center
+boundary
+bridge between worlds
+distance
+closeness
+speed
+stillness
+motion
+weight
+lightness
+emptiness
+abundance
+scarcity
+risk
+safety
+danger
+chance
+coincidence
+meaning
+purpose
+absurdity
+irony
+nostalgia for the future
+time travel
+eternity
+moment
+legacy
+transformation
+rebirth
+decay
+growth
+evolution of ideas
+collapse
+emergence

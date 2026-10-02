@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 from collections import OrderedDict
@@ -20,15 +21,17 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from shockwave.bridge import UnknownConceptError, build_graph, find_bridge, with_extra_concepts
-from shockwave.concepts import load_concepts
-from shockwave.embeddings import Embedder, cached_embed, lazy_embedder
+from shockwave.concepts import UNGROUPED, load_vocabulary
+from shockwave.embeddings import Embedder, cached_embed, encode_vectors, lazy_embedder
 from shockwave.layout import Layout, reduce_to_3d
 from shockwave.narrate import LLMConfig, NarrationError, llm_config_from_env, narrate
 
 log = logging.getLogger("shockwave")
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
+CURATED_PATH = BACKEND_DIR / "data" / "curated.json"
 MAX_CONCEPT_LENGTH = 60
+PLACED_GROUP = "Your phrases"
 NARRATION_CACHE_SIZE = 256
 
 
@@ -41,10 +44,16 @@ class Space:
     k: int = 6
     # Embeds free text on the fly; None means only vocabulary concepts are accepted.
     embed: Embedder | None = None
+    # One per label: the vocabulary section it came from (colors and regions in the UI).
+    groups: list[str] | None = None
+    # Hand-picked examples, daily challenges and pre-generated narrations (curate.py).
+    curated: dict = field(default_factory=dict)
     by_lower: dict[str, str] = field(init=False)
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "by_lower", {label.lower(): label for label in self.labels})
+        if self.groups is None:
+            object.__setattr__(self, "groups", [UNGROUPED] * len(self.labels))
 
 
 def build_space(
@@ -53,20 +62,28 @@ def build_space(
     reducer: Callable[[np.ndarray], Layout] = reduce_to_3d,
     k: int = 6,
     embed: Embedder | None = None,
+    groups: list[str] | None = None,
+    curated: dict | None = None,
 ) -> Space:
     return Space(labels=labels, vectors=vectors, layout=reducer(vectors),
-                 graph=build_graph(labels, vectors, k=k), k=k, embed=embed)
+                 graph=build_graph(labels, vectors, k=k), k=k, embed=embed,
+                 groups=groups, curated=curated or {})
+
+
+def load_curated(path: Path = CURATED_PATH) -> dict:
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
 
 
 def default_space(free_text: bool | None = None) -> Space:
     concepts_path = Path(os.getenv("SHOCKWAVE_CONCEPTS", BACKEND_DIR / "data" / "concepts.txt"))
     cache_dir = Path(os.getenv("SHOCKWAVE_CACHE_DIR", BACKEND_DIR / ".cache"))
-    labels = load_concepts(concepts_path)
-    log.info("embedding %d concepts from %s", len(labels), concepts_path)
+    vocab = load_vocabulary(concepts_path)
+    log.info("embedding %d concepts from %s", len(vocab.labels), concepts_path)
     if free_text is None:
         free_text = os.getenv("SHOCKWAVE_FREE_TEXT", "1") != "0"
-    space = build_space(labels, cached_embed(labels, cache_dir),
-                        embed=lazy_embedder() if free_text else None)
+    space = build_space(vocab.labels, cached_embed(vocab.labels, cache_dir),
+                        embed=lazy_embedder() if free_text else None,
+                        groups=vocab.groups, curated=load_curated())
     if space.embed:
         # Load the model and JIT-compile UMAP.transform now, not on the first visitor's query.
         space.layout.place(space.embed(["warm up"]))
@@ -74,16 +91,26 @@ def default_space(free_text: bool | None = None) -> Space:
 
 
 def space_payload(space: Space) -> dict:
-    """The concept cloud as the frontend draws it: 3D nodes plus the bridge graph's edges."""
+    """Everything the frontend needs to draw the cloud and to run its own searches:
+    3D nodes with their group, the bridge graph's edges, the graph's k, the vocabulary
+    vectors (int8, for A* and greedy heuristics), and the curated extras."""
     nodes = [
-        {"id": label, "x": float(x), "y": float(y), "z": float(z)}
-        for label, (x, y, z) in zip(space.labels, space.layout.coords, strict=True)
+        {"id": label, "group": group, "x": float(x), "y": float(y), "z": float(z)}
+        for label, group, (x, y, z) in zip(space.labels, space.groups, space.layout.coords,
+                                           strict=True)
     ]
     links = [
         {"source": a, "target": b, "similarity": round(1.0 - d["distance"], 4)}
         for a, b, d in space.graph.edges(data=True)
     ]
-    return {"nodes": nodes, "links": links}
+    return {
+        "nodes": nodes,
+        "links": links,
+        "groups": list(dict.fromkeys(space.groups)),
+        "k": space.k,
+        "vectors": encode_vectors(space.vectors),
+        "curated": space.curated,
+    }
 
 
 def default_static_dir() -> Path | None:
@@ -139,7 +166,7 @@ def create_app(
             log.info("narration %s", f"via {app.state.llm.model}" if app.state.llm else "off")
             yield
 
-    app = FastAPI(title="Semantic Shockwave", version="0.2.0", lifespan=lifespan)
+    app = FastAPI(title="Semantic Shockwave", version="0.3.0", lifespan=lifespan)
     origins = os.getenv("SHOCKWAVE_CORS_ORIGINS", "http://localhost:5173").split(",")
     app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["*"],
                        allow_headers=["*"])
@@ -167,8 +194,9 @@ def create_app(
                 graph = with_extra_concepts(s.graph, s.labels, s.vectors, extras, k=s.k)
                 coords = s.layout.place(np.stack(list(extras.values())))
                 placed = [
-                    {"id": name, "x": float(x), "y": float(y), "z": float(z)}
-                    for name, (x, y, z) in zip(extras, coords, strict=True)
+                    {"id": name, "group": PLACED_GROUP, "x": float(x), "y": float(y),
+                     "z": float(z), "vector": [round(float(v), 4) for v in vector]}
+                    for (name, vector), (x, y, z) in zip(extras.items(), coords, strict=True)
                 ]
             result = find_bridge(graph, source, target)
         except UnknownConceptError as exc:
@@ -180,6 +208,11 @@ def create_app(
                 for h in result.hops
             ],
             "placed": placed,
+            # Every edge a placed concept got, so the browser can run its own searches.
+            "links": [
+                {"source": a, "target": b, "similarity": round(1.0 - d["distance"], 4)}
+                for name in extras for a, b, d in graph.edges(name, data=True)
+            ],
         }
 
     @app.post("/api/v1/narrate")

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import threading
 from collections.abc import Callable
@@ -9,7 +10,12 @@ from pathlib import Path
 
 import numpy as np
 
-DEFAULT_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+# bge-small beats all-MiniLM-L6-v2 at the same size (384 dims, ~33M params) on short
+# concepts: far fewer bridges through spelling lookalikes like "pasta -> Parthenon".
+DEFAULT_MODEL = "BAAI/bge-small-en-v1.5"
+# The same model for transformers.js in the static build, and the pooling it was trained
+# with (bge uses the CLS token, not the mean of all tokens).
+BROWSER_MODEL = {"id": "Xenova/bge-small-en-v1.5", "pooling": "cls", "dtype": "q8"}
 
 Embedder = Callable[[list[str]], np.ndarray]
 
@@ -42,6 +48,25 @@ def lazy_embedder(
         return normalize(loaded[0](texts))
 
     return embed
+
+
+INT8_SCALE = 127
+
+
+def quantize(vectors: np.ndarray) -> np.ndarray:
+    """Unit-vector components fit in [-1, 1]; int8 keeps nearest-neighbour ranking intact."""
+    return np.clip(np.round(vectors * INT8_SCALE), -INT8_SCALE, INT8_SCALE).astype(np.int8)
+
+
+def encode_vectors(vectors: np.ndarray) -> dict:
+    """Vectors as compact JSON for the browser: int8, base64, row-major."""
+    q = quantize(vectors)
+    return {
+        "dtype": "int8",
+        "scale": INT8_SCALE,
+        "dims": int(q.shape[1]),
+        "data": base64.b64encode(q.tobytes()).decode("ascii"),
+    }
 
 
 def normalize(vectors: np.ndarray) -> np.ndarray:

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from shockwave.concepts import load_concepts
+from shockwave.concepts import load_concepts, load_vocabulary
 from shockwave.embeddings import cached_embed, lazy_embedder
 from shockwave.layout import fit_to_sphere
 
@@ -10,6 +10,14 @@ def test_load_concepts_strips_comments_blanks_and_duplicates(tmp_path):
     path = tmp_path / "concepts.txt"
     path.write_text("# header\njazz\n\nBlack Hole  # inline note\njazz\nblack hole\n")
     assert load_concepts(path) == ["jazz", "Black Hole"]
+
+
+def test_sections_assign_groups(tmp_path):
+    path = tmp_path / "concepts.txt"
+    path.write_text("# header\nloose\n## Space\nsun\nmoon\n## Music\njazz\nSun\n")
+    vocab = load_vocabulary(path)
+    assert vocab.labels == ["loose", "sun", "moon", "jazz"]
+    assert vocab.groups == ["Other", "Space", "Space", "Music"]
 
 
 def test_cached_embed_normalizes_and_hits_cache(tmp_path):

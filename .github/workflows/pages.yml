@@ -30,7 +30,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: hf-all-MiniLM-L6-v2
+          key: hf-bge-small-en-v1.5
       - name: Export the concept space
         working-directory: backend
         run: |
@@ -48,6 +48,7 @@ jobs:
           VITE_STATIC: "1"
         run: |
           npm ci
+          npm test   # includes the JS-vs-Python Dijkstra cross-check on this export
           npm run build
 
       - uses: actions/configure-pages@v5

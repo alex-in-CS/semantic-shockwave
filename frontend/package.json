@@ -1,18 +1,17 @@
 {
   "name": "semantic-shockwave-frontend",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test \"test/*.test.js\""
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.0",
-    "3d-force-graph": "^1.77.0",
-    "three": "^0.186.1",
-    "three-spritetext": "^1.10.0"
+    "three": "^0.186.1"
   },
   "devDependencies": {
     "vite": "^7.0.0"

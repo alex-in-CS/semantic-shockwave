@@ -2,45 +2,24 @@
 
     uv run python -m shockwave.export ../frontend/public/space.json
 
-The file holds what `/api/v1/space` serves, plus what the browser needs to route
-and to place free text itself: the graph's k, the embedding model's name, and the
-vocabulary vectors quantized to int8 (unit-vector components fit in [-1, 1], and
-nearest-neighbour ranking survives the rounding).
+The file is exactly what `/api/v1/space` serves (nodes, links, groups, k, int8
+vocabulary vectors, curated extras) plus the embedding model's name and its
+transformers.js twin, so the browser embeds free text the same way.
 """
 
 from __future__ import annotations
 
-import base64
 import json
 import logging
 import sys
 from pathlib import Path
 
-import numpy as np
-
 from shockwave.app import Space, default_space, space_payload
-from shockwave.embeddings import DEFAULT_MODEL
-
-INT8_SCALE = 127
-
-
-def quantize(vectors: np.ndarray) -> np.ndarray:
-    return np.clip(np.round(vectors * INT8_SCALE), -INT8_SCALE, INT8_SCALE).astype(np.int8)
+from shockwave.embeddings import BROWSER_MODEL, DEFAULT_MODEL
 
 
 def export_payload(space: Space, model: str = DEFAULT_MODEL) -> dict:
-    vectors = quantize(space.vectors)
-    return {
-        **space_payload(space),
-        "k": space.k,
-        "model": model,
-        "vectors": {
-            "dtype": "int8",
-            "scale": INT8_SCALE,
-            "dims": int(vectors.shape[1]),
-            "data": base64.b64encode(vectors.tobytes()).decode("ascii"),
-        },
-    }
+    return {**space_payload(space), "model": model, "browser_model": BROWSER_MODEL}
 
 
 def main(argv: list[str]) -> None:
@@ -51,7 +30,8 @@ def main(argv: list[str]) -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
     # Free text is the browser's job in the static build, so the server-side model stays unloaded.
     payload = export_payload(default_space(free_text=False))
-    out.write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
+    out.write_text(json.dumps(payload, separators=(",", ":"), ensure_ascii=False),
+                   encoding="utf-8")
     logging.info("wrote %d concepts to %s (%.0f KB)", len(payload["nodes"]), out,
                  out.stat().st_size / 1024)
 

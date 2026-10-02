@@ -1,6 +1,6 @@
 [project]
 name = "semantic-shockwave"
-version = "0.2.0"
+version = "0.3.0"
 description = "Find the chain of stepping-stone concepts between two ideas in embedding space."
 requires-python = ">=3.12"
 dependencies = [

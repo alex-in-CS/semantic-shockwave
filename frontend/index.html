@@ -3,33 +3,98 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Pick two ideas, blow every unrelated concept away, and see the chain of stepping stones that connects them in embedding space." />
+    <meta name="description" content="A 3D map of 1,500 ideas by meaning. Pick two, watch 16 search algorithms find the chain of stepping stones between them, then blow everything else away." />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%237dd3fc' stroke-width='2' opacity='.5'/%3E%3Ccircle cx='9' cy='16' r='4' fill='%23f472b6'/%3E%3Ccircle cx='23' cy='16' r='4' fill='%23facc15'/%3E%3Cpath d='M13 16h6' stroke='%23a3e635' stroke-width='2.5'/%3E%3C/svg%3E" />
     <title>Semantic Shockwave</title>
   </head>
   <body>
     <div id="graph"></div>
+    <div id="tooltip" role="tooltip" hidden></div>
+    <datalist id="concepts"></datalist>
 
     <aside class="panel">
-      <h1>Semantic Shockwave</h1>
-      <p class="tagline">Pick two ideas. Blow everything else away. See the bridge.</p>
-
-      <form id="controls" autocomplete="off">
-        <label>From <input id="source" list="concepts" maxlength="60" placeholder="e.g. black hole" required /></label>
-        <label>To <input id="target" list="concepts" maxlength="60" placeholder="e.g. jazz" required /></label>
-        <datalist id="concepts"></datalist>
-        <div class="buttons">
-          <button type="submit" id="execute">Execute</button>
-          <button type="button" id="surprise" class="ghost" title="Two random concepts">Surprise me</button>
-          <button type="button" id="reset" class="ghost">Reset</button>
+      <header class="panel-head">
+        <h1>Semantic Shockwave</h1>
+        <div class="icons">
+          <button type="button" id="help" class="icon" aria-label="What is this?" title="What is this?">?</button>
+          <button type="button" id="sound" class="icon" aria-label="Turn sound on" title="Sound">🔇</button>
         </div>
-      </form>
+      </header>
 
-      <p id="status" role="status">Loading concept space…</p>
-      <ol id="chain"></ol>
-      <p id="summary" aria-live="polite"></p>
-      <p class="hint" id="hint">Tip: click a node to set <em>From</em>, then another for <em>To</em>.</p>
+      <nav class="tabs" role="tablist">
+        <button type="button" role="tab" id="tab-explore" aria-controls="explore" aria-selected="true">Explore</button>
+        <button type="button" role="tab" id="tab-challenge" aria-controls="challenge" aria-selected="false">Daily challenge</button>
+      </nav>
+
+      <section id="explore" role="tabpanel">
+        <form id="controls" autocomplete="off">
+          <div class="pair">
+            <label>From <input id="source" list="concepts" maxlength="60" placeholder="e.g. black hole" required /></label>
+            <button type="button" id="swap" class="icon swap" aria-label="Swap From and To" title="Swap">⇅</button>
+            <label>To <input id="target" list="concepts" maxlength="60" placeholder="e.g. jazz" required /></label>
+          </div>
+          <div id="examples" class="chips" aria-label="Examples"></div>
+          <div class="algo-row">
+            <label class="grow">Search algorithm <select id="algorithm"></select></label>
+            <label>Speed
+              <select id="speed">
+                <option value="7000">Slow</option>
+                <option value="3200" selected>Normal</option>
+                <option value="1200">Fast</option>
+                <option value="0">Instant</option>
+              </select>
+            </label>
+          </div>
+          <p id="algo-blurb" class="blurb"></p>
+          <div class="buttons">
+            <button type="submit" id="execute">Execute</button>
+            <button type="button" id="compare" class="ghost" title="Run all 16 algorithms on this pair">Compare all</button>
+          </div>
+          <div class="buttons">
+            <button type="button" id="surprise" class="ghost">Surprise me</button>
+            <button type="button" id="reset" class="ghost">Reset</button>
+          </div>
+        </form>
+        <p id="status" role="status">Loading concept space…</p>
+        <p id="stats" class="stats"></p>
+        <ol id="chain"></ol>
+        <p id="summary" aria-live="polite"></p>
+        <div id="comparison"></div>
+        <p class="hint" id="hint">Tip: click two nodes to pick them, or type <em>anything</em>.</p>
+      </section>
+
+      <section id="challenge" role="tabpanel" hidden></section>
     </aside>
+
+    <div id="legend" aria-label="Regions"></div>
+
+    <div id="tour" hidden>
+      <div class="tour-step"></div>
+      <div class="tour-hop"></div>
+      <p class="tour-why"></p>
+      <div class="tour-controls">
+        <button type="button" class="icon" data-tour="prev" aria-label="Previous hop">◀</button>
+        <button type="button" class="icon" data-tour="play" aria-label="Pause tour">❚❚</button>
+        <button type="button" class="icon" data-tour="next" aria-label="Next hop">▶</button>
+        <button type="button" class="icon" data-tour="close" aria-label="Close tour">✕</button>
+      </div>
+    </div>
+
+    <dialog id="intro">
+      <h2>What is this?</h2>
+      <p>An embedding model has read <strong id="intro-count">1,500</strong> everyday ideas and turned each into a list of numbers that captures its meaning. Ideas with similar meanings get similar numbers, so they sit close together in this 3D cloud: space words in one region, music in another, feelings somewhere else.</p>
+      <p>Pick two far-apart ideas. A search algorithm (choose from 16) hunts for the chain of small, sensible steps between them while you watch, and then the shockwave blows everything else away.</p>
+      <ul>
+        <li><strong>Explore:</strong> type or click two ideas, or type any phrase at all.</li>
+        <li><strong>Compare</strong> how different algorithms search the same space.</li>
+        <li><strong>Daily challenge:</strong> guess the stepping stones and try to beat the algorithm.</li>
+      </ul>
+      <div class="buttons">
+        <button type="button" data-intro="demo">Show me: black hole → jazz</button>
+        <button type="button" data-intro="challenge" class="ghost">Play today's challenge</button>
+      </div>
+      <button type="button" data-intro="close" class="link">Just let me explore</button>
+    </dialog>
 
     <script type="module" src="/src/main.js"></script>
   </body>

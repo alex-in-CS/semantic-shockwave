@@ -4,7 +4,8 @@ import json
 import numpy as np
 
 from shockwave.app import build_space, space_payload
-from shockwave.export import INT8_SCALE, export_payload, quantize
+from shockwave.embeddings import BROWSER_MODEL, INT8_SCALE, quantize
+from shockwave.export import export_payload
 from tests.conftest import arc_vectors
 from tests.test_api import LABELS, flat_layout
 
@@ -13,9 +14,10 @@ def test_export_matches_space_endpoint_and_is_json():
     space = build_space(LABELS, arc_vectors(10), reducer=flat_layout)
     payload = export_payload(space, model="m")
 
-    assert payload["nodes"] == space_payload(space)["nodes"]
-    assert payload["links"] == space_payload(space)["links"]
+    extras = ("model", "browser_model")
+    assert {k: v for k, v in payload.items() if k not in extras} == space_payload(space)
     assert (payload["k"], payload["model"]) == (space.k, "m")
+    assert payload["browser_model"] == BROWSER_MODEL
     json.dumps(payload)  # must serialize as-is
 
 
