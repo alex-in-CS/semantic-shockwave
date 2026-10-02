@@ -1,0 +1,556 @@
+# Concept vocabulary: one per line. Edit freely; embeddings re-cache automatically.
+# Wide on purpose: the fun is in bridging distant domains.
+
+# Physics & space
+black hole
+gravity
+supernova
+quantum entanglement
+dark matter
+light
+entropy
+time
+galaxy
+orbit
+telescope
+astronaut
+big bang
+neutron star
+comet
+moon
+sun
+eclipse
+magnetism
+wave
+particle
+relativity
+atom
+nuclear fusion
+radiation
+vacuum
+spacetime
+meteor
+aurora
+rocket
+space station
+exoplanet
+cosmic microwave background
+antimatter
+pendulum
+friction
+momentum
+thermodynamics
+laser
+prism
+sound wave
+resonance
+
+# Earth & weather
+volcano
+hurricane
+earthquake
+glacier
+desert
+mountain
+canyon
+tide
+rain
+lightning
+thunderstorm
+snowflake
+tornado
+monsoon
+fog
+rainbow
+continental drift
+fossil
+crystal
+diamond
+gold
+iron
+cave
+island
+climate change
+drought
+wildfire
+
+# Life & nature
+evolution
+DNA
+photosynthesis
+forest
+ocean
+coral reef
+seed
+honeybee
+wolf
+migration
+fungus
+river
+rainforest
+tree
+flower
+pollen
+butterfly
+spider web
+ant colony
+whale
+octopus
+shark
+eagle
+owl
+lion
+elephant
+dinosaur
+virus
+bacteria
+cell
+mitochondria
+ecosystem
+predator
+camouflage
+symbiosis
+extinction
+mutation
+metamorphosis
+hibernation
+bird song
+nest
+roots
+moss
+swamp
+jellyfish
+firefly
+
+# Body & health
+heartbeat
+neuron
+brain
+blood
+skeleton
+immune system
+vaccine
+fever
+pain
+breath
+muscle
+digestion
+hormone
+adrenaline
+dopamine
+medicine
+surgery
+pandemic
+aging
+birth
+death
+hunger
+exercise
+marathon
+yoga
+
+# Mind & feelings
+memory
+dream
+consciousness
+emotion
+fear
+love
+sleep
+meditation
+nostalgia
+curiosity
+anxiety
+joy
+grief
+anger
+loneliness
+hope
+jealousy
+empathy
+trust
+courage
+shame
+boredom
+imagination
+intuition
+habit
+addiction
+attention
+creativity
+genius
+madness
+happiness
+regret
+desire
+childhood
+identity
+
+# Knowledge & science
+mathematics
+geometry
+prime number
+probability
+statistics
+logic
+paradox
+theory
+experiment
+hypothesis
+microscope
+map
+compass
+calendar
+clock
+encyclopedia
+library
+university
+philosophy
+psychology
+economics
+history
+archaeology
+astronomy
+chemistry
+biology
+linguistics
+fractal
+zero
+
+# Technology
+computer
+algorithm
+internet
+artificial intelligence
+robot
+encryption
+smartphone
+electricity
+satellite
+blockchain
+video game
+printing press
+steam engine
+wheel
+airplane
+automobile
+railway
+bicycle
+telephone
+radio
+television
+camera
+battery
+semiconductor
+software
+virtual reality
+neural network
+search engine
+email
+password
+hacker
+3D printer
+drone
+solar panel
+nuclear reactor
+bridge
+skyscraper
+dam
+factory
+assembly line
+spreadsheet
+open source
+cloud computing
+self-driving car
+
+# Society & economics
+money
+market
+trade
+inflation
+democracy
+law
+war
+peace
+city
+language
+religion
+empire
+revolution
+social media
+bank
+debt
+tax
+stock market
+capitalism
+communism
+monarchy
+election
+protest
+police
+prison
+court
+constitution
+diplomacy
+border
+immigration
+colonialism
+slavery
+poverty
+wealth
+startup
+advertising
+propaganda
+newspaper
+gossip
+friendship
+family
+marriage
+wedding
+funeral
+tradition
+festival
+holiday
+school
+teacher
+education
+job
+retirement
+corruption
+justice
+human rights
+globalization
+refugee
+
+# History & myth
+ancient Egypt
+pyramid
+Roman Empire
+medieval castle
+knight
+samurai
+Viking
+renaissance
+industrial revolution
+cold war
+moon landing
+silk road
+gladiator
+pharaoh
+dragon
+unicorn
+ghost
+vampire
+witch
+wizard
+mermaid
+phoenix
+Atlantis
+Greek gods
+Norse mythology
+fairy tale
+legend
+prophecy
+treasure
+pirate
+
+# Art & culture
+jazz
+symphony
+painting
+poetry
+cinema
+dance
+architecture
+photography
+theater
+mythology
+novel
+graffiti
+rock and roll
+hip hop
+opera
+blues
+punk
+classical music
+electronic music
+guitar
+piano
+drum
+violin
+orchestra
+choir
+song
+lullaby
+improvisation
+rhythm
+melody
+harmony
+sculpture
+museum
+comic book
+anime
+cartoon
+animation
+fashion
+tattoo
+portrait
+self-portrait
+surrealism
+cubism
+abstract art
+minimalism
+haiku
+shakespeare
+tragedy
+comedy
+satire
+horror movie
+science fiction
+detective story
+romance
+mask
+puppet
+circus
+magic trick
+mime
+
+# Sports & games
+football
+basketball
+chess
+poker
+olympics
+boxing
+surfing
+skateboarding
+mountain climbing
+tennis
+cricket
+puzzle
+dice
+lottery
+board game
+hide and seek
+
+# Food & everyday
+coffee
+bread
+wine
+spice
+fire
+kitchen
+salt
+chocolate
+tea
+sugar
+honey
+cheese
+rice
+pizza
+sushi
+soup
+fermentation
+recipe
+restaurant
+street food
+farm
+harvest
+garden
+vegetarian
+beer
+candy
+breakfast
+picnic
+home
+furniture
+door
+window
+key
+lock
+umbrella
+candle
+blanket
+shoe
+backpack
+suitcase
+wallet
+
+# Places & travel
+village
+desert island
+lighthouse
+harbor
+airport
+train station
+subway
+highway
+road trip
+hotel
+tourism
+passport
+frontier
+ruins
+temple
+cathedral
+mosque
+garden of eden
+paradise
+underworld
+prison cell
+hospital
+playground
+cemetery
+marketplace
+neighborhood
+suburb
+metropolis
+
+# Abstract
+chaos
+order
+infinity
+freedom
+truth
+beauty
+silence
+journey
+mirror
+labyrinth
+balance
+power
+knowledge
+wisdom
+fate
+luck
+destiny
+change
+symmetry
+pattern
+network
+system
+signal
+noise
+secret
+mystery
+question
+answer
+beginning
+ending
+cycle
+nothing
+everything
+void
+shadow
+color
+darkness
+dawn
+twilight
+winter
+summer
+spring
+autumn
+weekend
+memory palace
+utopia
+apocalypse

@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Embedding cache (rebuilt automatically)
+backend/.cache/
+
+# Node
+node_modules/
+frontend/dist/
+
+# Env / editor / OS
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
